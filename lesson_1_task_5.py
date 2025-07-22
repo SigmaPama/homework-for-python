@@ -1,0 +1,13 @@
+def tool(num):
+    print(num, end = "")
+tool(8)
+tool(8)
+tool(0)
+tool(0)
+tool(5)
+tool(5)
+tool(5)
+tool(3)
+tool(5)
+tool(3)
+tool(5)
