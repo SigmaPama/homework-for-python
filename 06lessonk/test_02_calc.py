@@ -1,23 +1,34 @@
 import pytest
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-print(ChromeDriverManager().install())
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome()
+URL = "https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html"
+
 @pytest.fixture
-def test_calcul():
-    driver.get("https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html")
-    driver.implicitly_wait(4)
-    input_txt = driver.find_element(By.CSS_SELECTOR, "#delay").click()
-    input_txt.send_keys("45")
-    first_counter = driver.find_element(By.XPATH, "//*[contains(text(),'7')]").click()
-    plus = driver.find_element(By.XPATH, "//*[contains(text(),'+')]").click()
-    second_counter = driver.find_element(By.XPATH, "//*[contains(text(),'8')]").click()
-    equal = driver.find_element(By.XPATH, "//*[contains(text(),'=')]").click()
-    assert WebDriverWait(driver, 45).until(EC.visibility_of_element_located((By.LINK_TEXT, "15"))
-    )
+def driver():
+    service = ChromeService(ChromeDriverManager().install())
+    options = webdriver.ChromeOptions()
+    drv = webdriver.Chrome(service=service, options=options)
+    drv.maximize_window()
+    yield drv
+    drv.quit()
+
+def test_slow_calculator_45s(driver):
+    driver.get(URL)
+    wait = WebDriverWait(driver, 45) 
+
+    delay = driver.find_element(By.ID, "delay")
+    delay.clear()
+    delay.send_keys("45")
+
+    for key in ["7", "+", "8", "="]:
+        driver.find_element(By.XPATH, f"//span[normalize-space()='{key}']").click()
+
+    # Ждём появления "15" в экране калькулятора
+    wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div.screen"), "15"))
+    assert driver.find_element(By.CSS_SELECTOR, "div.screen").text.strip() == "15"
+    
