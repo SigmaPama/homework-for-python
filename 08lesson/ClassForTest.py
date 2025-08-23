@@ -4,8 +4,8 @@ class base_option:
 
     def __init__(self, url):
         self.base_url = url
-        self.login = ""
-        self.password = ""
+        self.login = "rabota.chuguev@gmail.com"
+        self.password = "Uoj067ap"
         self.response = None 
 
     def companny_list(self):
@@ -16,14 +16,14 @@ class base_option:
         'name': ''}
         headers = {'Content-Type': 'application/json'}
         self.response = requests.post(url, json=payload, headers=headers)
-        return self.response.json()["content"][0]
+        return self.response.json()["content"][0]['id']
 
     def get_token(self):
         url = self.base_url +"/api-v2/auth/keys/get"
         payload = {
             'login': self.login,
             'password': self.password,
-            'companyId': print(self.response)
+            'companyId': self.response.json()["content"][0]["id"]
         }
         headers = {'Content-Type': 'application/json'}
         result = requests.post(url, json=payload, headers=headers)

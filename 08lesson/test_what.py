@@ -17,7 +17,7 @@ def test_create_company():
     token = api.get_token()
     my_headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer' +{token}
+        'Authorization': f'Bearer {token}'
     }
 
     body = {
@@ -26,7 +26,9 @@ def test_create_company():
     }
     my_new_company = requests.post(base_url+"/api-v2/projects", json=body, headers=my_headers)
     my_new_company.json()
-    assert id == my_new_company["id"]
+    assert id == my_new_company.json()['id'] #Негативная
+    assert my_new_company.status_code == 201
+    assert my_new_company.json()["title"] == "Nextdoor" #Негативная
 
 def test_change_in_company():
     id = api.companny_list()
@@ -39,12 +41,14 @@ def test_change_in_company():
     
     my_headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer' +{token}
+        'Authorization': f'Bearer +{token}'
     }
 
-    changed_company_id = requests.put(base_url+"/api-v2/projects/{id}", json=body, headers=my_headers)
+    changed_company_id = requests.put(base_url+ f"/api-v2/projects/{id}", json=body, headers=my_headers)
     changed_company_id.json()
-    assert id == changed_company_id["id"]
+    assert changed_company_id.status_code == 200
+    assert id == changed_company_id.json()['id']
+    assert changed_company_id.json()["deleted"] == False #Негативная
 
 
 
@@ -54,9 +58,10 @@ def test_get_with_id():
     token = api.get_token()
     my_headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer' +token
+        'Authorization': f'Bearer {token}'
     }
 
-    get_id = requests.get(base_url+"/api-v2/projects/{id}", headers=my_headers)
+    get_id = requests.get(base_url+ f"/api-v2/projects/{id}", headers=my_headers)
     get_id.json()
-
+    assert get_id.status_code == 200
+    assert get_id.json()["id"] == None #Негативная
