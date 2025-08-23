@@ -8,6 +8,7 @@ class base_option:
         self.password = "real_password_here"
         self.response = None 
 
+
     def companny_list(self):
         url = self.base_url +"/api-v2/auth/companies"
         payload = {
@@ -17,6 +18,8 @@ class base_option:
         headers = {'Content-Type': 'application/json'}
         self.response = requests.post(url, json=payload, headers=headers)
         return self.response.json()["content"][0]['id']
+
+
 
     def get_token(self):
         url = self.base_url +"/api-v2/auth/keys/get"
