@@ -4,8 +4,8 @@ class base_option:
 
     def __init__(self, url):
         self.base_url = url
-        self.login = "rabota.chuguev@gmail.com"
-        self.password = "Uoj067ap"
+        self.login = "real_login_here"
+        self.password = "real_password_here"
         self.response = None 
 
     def companny_list(self):
