@@ -14,7 +14,7 @@ def test_create_project():
         'Authorization': f'Bearer {token}'
     }
     body = {
-        "title": "NextDoor",
+        "title": "Test_project",
         "users": {}
     }
     my_new_project = requests.post(base_url+"/api-v2/projects",
