@@ -27,8 +27,8 @@ class base_option:
             'password': self.password,
             'companyId': self.response.json()["content"][0]["id"]}
         headers = {'Content-Type': 'application/json'}
-        result = requests.post(url, json=payload, headers=headers)
-        self.res_id = result.json()
+        post = requests.post(url, json=payload, headers=headers)
+        self.res_id = post.json()
         return self.res_id["key"]
 
     def get_new_project(self, title):

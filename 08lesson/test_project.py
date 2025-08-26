@@ -25,10 +25,10 @@ def test_create_project():
 
 
 def test_change_in_project():
-    project = api.get_new_project("Test_case")
+    project = api.get_new_project("Test_changed")
     body = {
         "deleted": True,
-        "title": "Test_case",
+        "title": "Test_changed",
         "users": {}
     }
     my_headers = {
