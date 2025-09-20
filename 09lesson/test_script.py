@@ -1,4 +1,5 @@
 from ClassForTest import bd_arguments
+import pytest
 
 db_connection_string = "postgresql://postgres:255@localhost:5432/subject"
 api = bd_arguments(db_connection_string)
@@ -13,6 +14,7 @@ def test_change_sub():
     create = api.create_sub(20, "test")
     change_text = api.change("test_pass", 20)
     assert create["subject_id"] == change_text["subject_id"]
+    assert change_text["subject_title"] == "test_pass" 
     api.delete_sub(change_text["subject_id"])
 
 def test_delete_subject():
@@ -22,4 +24,4 @@ def test_delete_subject():
     api.delete_sub(30)
     list_after = api.sub_list(30)
     assert len(list_before) == 1 
-    assert len(list_after) == 0   
+    assert len(list_after) == 0

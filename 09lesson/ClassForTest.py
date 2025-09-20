@@ -8,6 +8,7 @@ class bd_arguments:
         with self._db.connect() as conn:
             sql = text("INSERT INTO subject (subject_id, subject_title) VALUES (:new_id, :new_title) RETURNING *")
             result = conn.execute(sql, {"new_id": id, "new_title": title})
+            conn.commit()
             row = result.mappings().first()  
             return row
 
@@ -15,6 +16,7 @@ class bd_arguments:
         with self._db.connect() as conn:
             sql = text("DELETE FROM subject WHERE subject_id = :test_id")
             conn.execute(sql, {"test_id": id})
+            conn.commit()
 
     def sub_list(self, id):
         with self._db.connect() as conn:
@@ -27,5 +29,6 @@ class bd_arguments:
         with self._db.connect() as conn:
             sql = text("UPDATE subject SET subject_title = :changed_text WHERE subject_id = :test_id RETURNING *")
             result = conn.execute(sql, {"changed_text": params, "test_id": id})
+            conn.commit()
             row = result.mappings().first() 
             return row
